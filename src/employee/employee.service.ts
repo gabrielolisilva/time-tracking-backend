@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { IEmployee } from './interface/employee.interface';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../prisma.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { IResponse } from 'src/utils/global.interfaces';
+import { IResponse } from '../utils/global.interfaces';
 
 @Injectable()
 export class EmployeeService {

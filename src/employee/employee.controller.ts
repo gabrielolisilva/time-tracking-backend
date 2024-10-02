@@ -12,8 +12,8 @@ import {
 import { EmployeeService } from './employee.service';
 import { IEmployee } from './interface/employee.interface';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
-import { IResponse } from 'src/utils/global.interfaces';
-import { Request, Response } from 'express';
+import { IResponse } from '../utils/global.interfaces';
+import { Response } from 'express';
 
 @Controller('employee')
 export class EmployeeController {
