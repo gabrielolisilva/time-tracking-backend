@@ -8,8 +8,8 @@ import { IResponse } from 'src/utils/global.interfaces';
 export class EmployeeService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  getEmployees(): Promise<IEmployee[]> {
-    return this.prismaService.employee.findMany();
+  async getEmployees(): Promise<IEmployee[]> {
+    return await this.prismaService.employee.findMany();
   }
 
   async getEmployee(id: string): Promise<IResponse | IEmployee> {
@@ -29,8 +29,10 @@ export class EmployeeService {
     return userDB;
   }
 
-  createEmployee(data: CreateEmployeeDto): Promise<IEmployee> | IResponse {
-    const isEmailUnique = this.isEmailUnique(data.email);
+  async createEmployee(
+    data: CreateEmployeeDto,
+  ): Promise<IEmployee | IResponse> {
+    const isEmailUnique = await this.isEmailUnique(data.email);
     if (!isEmailUnique) {
       const response: IResponse = {
         msg: 'Email already exists',
@@ -40,7 +42,8 @@ export class EmployeeService {
       return response;
     }
 
-    return this.prismaService.employee.create({ data });
+    const createdEmployee = await this.prismaService.employee.create({ data });
+    return createdEmployee;
   }
 
   async updateEmployee(
@@ -60,13 +63,15 @@ export class EmployeeService {
       return response;
     }
 
-    return this.prismaService.employee.update({
+    const updatedEmployee = await this.prismaService.employee.update({
       where: { id },
       data,
     });
+
+    return updatedEmployee;
   }
 
-  async deleteEmployee(id: string): Promise<IResponse | IEmployee> {
+  async deleteEmployee(id: string): Promise<IEmployee | IResponse> {
     const userDB = await this.prismaService.employee.findUnique({
       where: { id },
     });
@@ -80,13 +85,15 @@ export class EmployeeService {
       return response;
     }
 
-    return this.prismaService.employee.delete({
+    const deletedEmployee = await this.prismaService.employee.delete({
       where: { id },
     });
+
+    return deletedEmployee;
   }
 
-  isEmailUnique(email: string): boolean {
-    const employee = this.prismaService.employee.findUnique({
+  async isEmailUnique(email: string): Promise<boolean> {
+    const employee = await this.prismaService.employee.findUnique({
       where: { email },
     });
 
